@@ -4,14 +4,63 @@ import './App.css';
 import Person from './Person/Person';
 
 class App extends Component {
+
+  state = {
+    persons: [
+      { name: 'Max', age: 28 },
+      { name: 'Manu', age: 29 },
+      { name: 'Stephanie', age: 26 },
+    ]
+  }
+
+  switchNameHandler = (newName) => {
+    //console.log('btn clicked!');
+    this.setState({
+      persons: [
+        { name: newName, age: 28 },
+        { name: 'Manu', age: 29 },
+        { name: 'Stephanie', age: 35 },
+      ]
+    })    
+  }
+
+  nameChangeHandler = (event) => {
+    this.setState({
+      persons: [
+        { name: 'Max', age: 28 },
+        { name: event.target.value, age: 29 },
+        { name: 'Stephanie', age: 35 },
+      ]
+    })    
+  }
+
   render() {
+    const style = {
+      backgorundcolor: 'white',
+      font: 'inherit',
+      border: '1x solid blue',
+      padding: '8px',
+      cursor: 'pointer'
+    };
+
     return (
-   <div className="App">
+    <div className="App">
      <h1> Hi I'm a react app</h1>
      <p>This is really working :)</p>
-     <Person name="Max" age="28" />
-     <Person name="Manu" age="29" > My hobbies: Racing</Person>
-     <Person name="Stephanie" age="26" />     
+     <button 
+     style={style}
+     onClick={this.switchNameHandler.bind(this,'William')}>Switch Name</button>
+     <Person 
+      name={this.state.persons[0].name} 
+      age={this.state.persons[0].age}     />
+     <Person 
+      name={this.state.persons[1].name} 
+      age={this.state.persons[1].age} 
+      click={this.switchNameHandler.bind(this, 'Joe')}
+      changed={this.nameChangeHandler}> My hobbies: Racing</Person>
+     <Person 
+      name={this.state.persons[2].name} 
+      age={this.state.persons[2].age} />     
      
 
    </div>
