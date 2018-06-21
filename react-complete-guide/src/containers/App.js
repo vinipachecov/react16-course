@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import classes from './App.css'
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
+import Aux from '../hoc/Aux';
+import withClass from '../hoc/withClass';
 
+export const AuthContext = React.createContext(false);
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -13,7 +16,9 @@ class App extends Component {
 				{ id: '2', name: 'Manu', age: 29 },
 				{ id: '3', name: 'Stephanie', age: 26 },
 			],
-			showPersons: false
+			showPersons: false,
+			toggleClicked: 0,
+			authenticated: false
 		}
 	}
 
@@ -66,7 +71,12 @@ class App extends Component {
 
 	togglePersonsHandler = () => {
 		const doesShow = this.state.showPersons;
-		this.setState({ showPersons: !doesShow });
+		this.setState((prevState, props) => { 			
+			return {
+				showPersons: !doesShow,
+				toggleClicked: prevState.toggleClicked + 1
+			}			
+		 });
 	}
 
 	deletePersonHandler = (personIndex) => {
@@ -84,8 +94,38 @@ class App extends Component {
 		console.log('[UPDATE App.js] inside componentwillUpdate', nextProps, nextState);
 	}
 
+
+	/**
+	 * Sometimes you have cases where you receive new props
+	 * and you want to update your local state because maybe you want
+	 * to work with that state you want to change in that component before a user clicks
+	 * like a save button and you committed up the state three component tree
+	 * in your anpp and then you can change it somewhere else and they are free to change your props again 
+	 */
+static getDerivedStateFromProps(nextProps, prevState) {
+		console.log(
+			'[UPDATE App.js] inside getDerivedStateFromProps',
+			nextProps,
+			prevState
+		);		
+		return prevState;
+	}
+
+	/**
+	 * This lifecycle trigger right before the dom tree is updated
+	 */
+	getSnapshotBeforeUpdate() {
+		console.log(
+			'[UPDATE App.js] inside getSnapshotBeforeUpdate'		
+		);				
+	}
+
 	componentDidUpdate() {
 		console.log('[UPDATE App.js] inside componentdidUpdate');
+	}
+
+	loginHandler = () => {
+		this.setState({ authenticated: true });
 	}
 
 	render() {
@@ -96,22 +136,23 @@ class App extends Component {
 			persons = <Persons
 				persons={this.state.persons}
 				clicked={this.deletePersonHandler}
-				changed={this.nameChangeHandler}
+				changed={this.nameChangeHandler}				
 			/>;
 		}
 		return (
-			<div className={classes.App}>
+			<Aux>				
 			<button onClick={() => { this.setState( { showPersons: true } ) }}>Show Persons</button>
 				<Cockpit
 					appTitle={this.props.title}
 					showPersons={this.state.showPersons}
 					persons={this.state.persons}
-					clicked={this.togglePersonsHandler}
+					clicked={this.togglePersonsHandler}					
+					login={this.loginHandler}					
 				/>
-				{persons}
-			</div>
+				<AuthContext.Provider value={this.state.authenticated}>{persons}</AuthContext.Provider>				
+			</Aux>			
 		);
 	}
 }
 
-export default App;
+export default withClass(App, classes.App);
