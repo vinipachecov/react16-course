@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 import './NewPost.css';
 
@@ -7,7 +8,11 @@ class NewPost extends Component {
     state = {
         title: '',
         content: '',
-        author: 'Max'
+        author: 'Max',
+    }
+
+    componentDidMount() {
+        console.log('new post', this.props);
     }
 
     postDataHandler = async () => {
@@ -17,10 +22,13 @@ class NewPost extends Component {
             author: this.state.author
         };
         const response = await axios.post('/posts', post);
+
+        // change the page
+        this.props.history.push('/posts');       
         console.log(response);
     }
 
-    render () {
+    render () {        
         return (
             <div className="NewPost">
                 <h1>Add a Post</h1>
