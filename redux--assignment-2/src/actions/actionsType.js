@@ -1,0 +1,3 @@
+export const RECEIVE_PERSON_LIST = 'RECEIVE_PERSON_LIST';
+export const ADD_PERSON = 'ADD_PERSON';
+export const DELETE_PERSON = 'DELETE_PERSON';
