@@ -1,4 +1,4 @@
-import { INCREMENT, ADD, SUBTRACT, STORE_RESULT, DELETE_RESULT, DECREMENT } from "./actions";
+import { INCREMENT, ADD, SUBTRACT, STORE_RESULT, DELETE_RESULT, DECREMENT } from "./actions/actionsTypes";
 
 const initialState = {
   counter: 0,
