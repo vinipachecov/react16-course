@@ -1,47 +1,48 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 import Order from '../../components/Order/Order';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import { fetchOrders } from '../../store/actions/orderActions';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 class Orders extends Component {
 
-  state = {
-    orders: [],
-    loading: true
-  }
-
   async componentDidMount() {
-    try {
-      const res = await axios.get('/orders.json');
-      console.log(res.data);
-      const fetchOrders = [];
-      for (const key in res.data) {
-        fetchOrders.push({ ...res.data[key], id:key });
-      }      
-      console.log('ordesr = ', fetchOrders);
-      this.setState({ loading: false, orders: fetchOrders });      
-    } catch (error) {
-      console.log(error);
-      this.setState({ loading: false });            
-    }    
+    this.props.onFetchOrders()    
   }
 
   render() {    
-    return (
-      <div>
-        {
-          this.state.orders.map(order => 
-            (<Order key={order.id}
-              ingredients={order.ingredients}
-              price={order.price}
-             />)
-          )
-        }
-        {/* <Order/>
-        <Order/> */}
-      </div>
-    )
+    let orders = <Spinner />;
+
+    if (!this.props.loading) {      
+      orders = this.props.orders.map(order => (
+        <Order key={order.id}
+                ingredients={order.ingredients}
+                price={order.price}
+               />
+              ));
+    }    
+     return (
+       <div>
+       {orders}
+       </div>
+     )
   }
 }
 
-export default withErrorHandler(Orders, axios);
+const mapStateToProps = state => {
+  return {
+    orders: state.order.orders,
+    loading: state.order.loading
+  }
+}
+
+const mapDIspatchToProps = dispatch => {
+  return {
+    onFetchOrders: () => dispatch(fetchOrders()),
+
+  }
+}
+
+export default connect(mapStateToProps, mapDIspatchToProps)(withErrorHandler(Orders, axios));
