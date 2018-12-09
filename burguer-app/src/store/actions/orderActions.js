@@ -14,11 +14,11 @@ export const purchaseBurgerFail = (error) => ({
   error
 });
 
-export const purchaseBurger = ( orderData ) => {
+export const purchaseBurger = ( orderData, token ) => {
   return async dispatch => {
     try {
       dispatch(purchaseBurgerStart());
-      const response = await axios.post('/orders.json', orderData);                  
+      const response = await axios.post('/orders.json?auth=' + token, orderData);                  
       dispatch(purchaseBurgerPurchase(response.data.name, orderData))
     } catch (error) {
       console.log('deu erro ', error);
@@ -52,17 +52,15 @@ export const fetchOrdersStart = () => ({
   type: FETCH_ORDERS_START,
 })
 
-export const fetchOrders = (payload) => {
-  return async dispatch => {
+export const fetchOrders = (token) => {
+  return async (dispatch) => {
     try {      
       dispatch(fetchOrdersStart())
-      const res = await axios.get('/orders.json');
-      console.log(res.data);
+      const res = await axios.get('/orders.json?auth=' + token);      
       const fetchOrders = [];
       for (const key in res.data) {
         fetchOrders.push({ ...res.data[key], id:key });
-      }      
-      console.log('orders = ', fetchOrders);
+      }            
       dispatch(fetchOrdersSuccess(fetchOrders))      
     } catch (error) {
       console.log(error);

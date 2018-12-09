@@ -13,6 +13,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { ADD_INGREDIENT, REMOVE_INGREDIENT, addIgredient, removeIgredient, initIgredients } from '../../store/actions/burgerBuilderAction';
 import { purchaseInit } from '../../store/actions/orderActions';
+import { setAuthRedirectPath } from '../../store/actions/authActions';
 
 
 class BurguerBuilder extends Component {
@@ -72,7 +73,12 @@ class BurguerBuilder extends Component {
   // }
 
   purchaseHandler = () => {
-    this.setState({ purchasing: true});
+    if (this.props.isAUthenticated) {
+      this.setState({ purchasing: true});
+    } else {
+      this.props.onSetAuthRedirectPath('/checkout');
+      this.props.history.push('/auth');
+    }   
   }
 
   // Related also to the backdrop so it cancel the current purchase 
@@ -110,6 +116,7 @@ class BurguerBuilder extends Component {
             disabled={disabledInfo}
             price={this.props.price}
             purchasable={this.updatePurchaseState(this.props.ings)}
+            isAuth={this.props.isAuthenticated}
             ordered={this.purchaseHandler}
         />
         </Aux>
@@ -139,7 +146,8 @@ class BurguerBuilder extends Component {
 const mapStateToProps = (state) => ({
   ings: state.burgerBuilder.ingredients,
   error: state.burgerBuilder.error,
-  price: state.burgerBuilder.totalPrice
+  price: state.burgerBuilder.totalPrice,
+  isAuthenticated: state.auth.token !== null
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -147,7 +155,8 @@ const mapDispatchToProps = (dispatch) => {
     onIngredientAdded: (ingredientName) => dispatch(addIgredient(ingredientName)),
     onIngredientRemove: (ingredientName) => dispatch(removeIgredient(ingredientName)),
     onInitIngredients: () => dispatch(initIgredients()),
-    onInitPurchase: () => dispatch(purchaseInit())
+    onInitPurchase: () => dispatch(purchaseInit()),
+    onSetAuthRedirectPath: (path) => dispatch(setAuthRedirectPath(path))
   }
 }
 
