@@ -99,13 +99,17 @@ class ContactData extends Component {
     event.preventDefault();        
     const formData = {
     }
+    
     for (let formElementIdentifier in this.state.orderForm) {
       formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;                  
     }
+
     const order = {
       ingredients: this.props.ings,
       price: this.props.price,
-      orderData: formData      
+      orderData: formData,
+      // to know who made the order!!
+      userId: this.props.userId      
     };
 
     this.props.onOrderBurger(order, this.props.token);
@@ -193,7 +197,8 @@ const mapStateToProps = state => {
     ings: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
     loading: state.order.loading,
-    token: state.auth.token
+    token: state.auth.token,
+    userId: state.auth.userId
   }
 }
 

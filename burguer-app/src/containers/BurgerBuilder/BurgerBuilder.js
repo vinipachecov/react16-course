@@ -73,7 +73,7 @@ class BurguerBuilder extends Component {
   // }
 
   purchaseHandler = () => {
-    if (this.props.isAUthenticated) {
+    if (this.props.isAuthenticated) {
       this.setState({ purchasing: true});
     } else {
       this.props.onSetAuthRedirectPath('/checkout');

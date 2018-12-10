@@ -1,5 +1,6 @@
 import { PURCHASE_BURGER_SUCCESS, PURCHASE_BURGER_FAIL, PURCHASE_BURGER_START, PURCHASE_INIT, FETCH_ORDERS_SUCCESS, FETCH_ORDERS_FAIL, FETCH_ORDERS_START } from "../actions/actionTypes";
 import axios from '../../axios-orders';
+import { userInfo } from "os";
 
 export const purchaseBurgerPurchase = (id, orderData) => {
   return {
@@ -52,11 +53,12 @@ export const fetchOrdersStart = () => ({
   type: FETCH_ORDERS_START,
 })
 
-export const fetchOrders = (token) => {
+export const fetchOrders = (token, userId) => {
   return async (dispatch) => {
     try {      
       dispatch(fetchOrdersStart())
-      const res = await axios.get('/orders.json?auth=' + token);      
+      const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId +'"';
+      const res = await axios.get('/orders.json' + queryParams);      
       const fetchOrders = [];
       for (const key in res.data) {
         fetchOrders.push({ ...res.data[key], id:key });
