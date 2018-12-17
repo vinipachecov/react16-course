@@ -11,12 +11,12 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import { ADD_INGREDIENT, REMOVE_INGREDIENT, addIgredient, removeIgredient, initIgredients } from '../../store/actions/burgerBuilderAction';
+import { addIgredient, removeIgredient, initIgredients } from '../../store/actions/burgerBuilderAction';
 import { purchaseInit } from '../../store/actions/orderActions';
 import { setAuthRedirectPath } from '../../store/actions/authActions';
 
 
-class BurguerBuilder extends Component {
+export class BurguerBuilder extends Component {
   
   state = {            
     purchasing: false,    
