@@ -1,6 +1,5 @@
 import { PURCHASE_BURGER_SUCCESS, PURCHASE_BURGER_FAIL, PURCHASE_BURGER_START, PURCHASE_INIT, FETCH_ORDERS_SUCCESS, FETCH_ORDERS_FAIL, FETCH_ORDERS_START } from "../actions/actionTypes";
 import axios from '../../axios-orders';
-import { userInfo } from "os";
 
 export const purchaseBurgerPurchase = (id, orderData) => {
   return {
@@ -22,7 +21,7 @@ export const purchaseBurger = ( orderData, token ) => {
       const response = await axios.post('/orders.json?auth=' + token, orderData);                  
       dispatch(purchaseBurgerPurchase(response.data.name, orderData))
     } catch (error) {
-      console.log('deu erro ', error);
+      console.log(error);
       dispatch(purchaseBurgerFail(error));
     }     
   }

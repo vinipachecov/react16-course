@@ -14,15 +14,16 @@ import thunk from 'redux-thunk';
 const logger = store => {
   return next => {
     return action => {
-      console.log('[Middleware] dispatching', action);
+      // console.log('[Middleware] dispatching', action);
       const result = next(action);
-      console.log('[Middleware] next state', store.getState());
+      // console.log('[Middleware] next state', store.getState());
       return result;
     }
   }
 }
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// allow dev tools only in development
+const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const store = createStore(reducers, composeEnhancers(
   applyMiddleware(thunk)

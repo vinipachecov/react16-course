@@ -40,8 +40,7 @@ export const checkAuthTimeout = (expirationTime) => {
 
 
 export const auth = (email, password, isSignup) => {
-  return async dispatch => {
-    console.log(email, password);
+  return async dispatch => {    
     const authData = {
       email,
       password,
