@@ -9,7 +9,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import reducers from './store/reducers';
 import thunk from 'redux-thunk';
-import { watchAuth, watchBurgerBuilder } from './store/sagas';
+import { watchAuth, watchBurgerBuilder, watchOrder } from './store/sagas';
 
 // very usefull middleware
 const logger = store => {
@@ -34,6 +34,7 @@ const store = createStore(reducers, composeEnhancers(
 
 sagaMiddleware.run(watchAuth);
 sagaMiddleware.run(watchBurgerBuilder);
+sagaMiddleware.run(watchOrder);
 
 const app = (
   <Provider store={store}>
