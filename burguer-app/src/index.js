@@ -25,12 +25,14 @@ const logger = store => {
 
 const sagaMiddleware = createSagaMiddleware();
 
+
 // allow dev tools only in development
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const store = createStore(reducers, composeEnhancers(
   applyMiddleware(thunk, sagaMiddleware)
 ));
+
 
 sagaMiddleware.run(watchAuth);
 sagaMiddleware.run(watchBurgerBuilder);
